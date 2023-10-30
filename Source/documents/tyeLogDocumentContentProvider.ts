@@ -1,50 +1,62 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as vscode from 'vscode';
-import { TyeApplicationProvider } from '../services/tyeApplicationProvider';
-import { TyeClientProvider } from '../services/tyeClient';
+import * as vscode from "vscode";
+import { TyeApplicationProvider } from "../services/tyeApplicationProvider";
+import { TyeClientProvider } from "../services/tyeClient";
 
-export class TyeLogDocumentContentProvider extends vscode.Disposable implements vscode.TextDocumentContentProvider {
-    private readonly onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
-    
-    constructor(private readonly tyeApplicationProvider: TyeApplicationProvider, private readonly tyeClientProvider: TyeClientProvider) {
-        super(() => this.onDidChangeEmitter.dispose());
-    }
+export class TyeLogDocumentContentProvider
+	extends vscode.Disposable
+	implements vscode.TextDocumentContentProvider
+{
+	private readonly onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
 
-    //TODO: onDidChangeEmmitter.fire can cause the document to reload, need to work out if we want to hook that
-    onDidChange = this.onDidChangeEmitter.event;
+	constructor(
+		private readonly tyeApplicationProvider: TyeApplicationProvider,
+		private readonly tyeClientProvider: TyeClientProvider
+	) {
+		super(() => this.onDidChangeEmitter.dispose());
+	}
 
-    async provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): Promise<string> {
-        //
-        // Tye Log URI Schema: tye-log://logs/<applicationId>/<service>
-        //
-        // NOTE: Using 'logs' as the authority is for the benefit of VS Code, which only displays the URI path in editor title.
-        //
+	//TODO: onDidChangeEmmitter.fire can cause the document to reload, need to work out if we want to hook that
+	onDidChange = this.onDidChangeEmitter.event;
 
-        // NOTE: VS Code doesn't close documents immediately after the editor is closed, but at some lazy future time.
-        //       But, it also won't ask to provide content while the document is open, unless we notify it of change.
-        //       So, if you immediately re-open the document in the editor, VS Code may show the same content.
+	async provideTextDocumentContent(
+		uri: vscode.Uri,
+		token: vscode.CancellationToken
+	): Promise<string> {
+		//
+		// Tye Log URI Schema: tye-log://logs/<applicationId>/<service>
+		//
+		// NOTE: Using 'logs' as the authority is for the benefit of VS Code, which only displays the URI path in editor title.
+		//
 
-        // NOTE: We expect '/<applicationId>/<service>[/...]'
-        const splitPath = uri.path.split('/');
+		// NOTE: VS Code doesn't close documents immediately after the editor is closed, but at some lazy future time.
+		//       But, it also won't ask to provide content while the document is open, unless we notify it of change.
+		//       So, if you immediately re-open the document in the editor, VS Code may show the same content.
 
-        if (splitPath.length >= 3) {
-            const applicationId = splitPath[1];
-            const service = splitPath[2];
+		// NOTE: We expect '/<applicationId>/<service>[/...]'
+		const splitPath = uri.path.split("/");
 
-            const applications = await this.tyeApplicationProvider.getApplications();
-            const application = applications.find(app => app.id === applicationId);
+		if (splitPath.length >= 3) {
+			const applicationId = splitPath[1];
+			const service = splitPath[2];
 
-            if (application) {
-                const tyeClient = this.tyeClientProvider(application.dashboard);
+			const applications =
+				await this.tyeApplicationProvider.getApplications();
+			const application = applications.find(
+				(app) => app.id === applicationId
+			);
 
-                if (tyeClient) {
-                    return await tyeClient.getLog(service, token);
-                }
-            }
-        }
+			if (application) {
+				const tyeClient = this.tyeClientProvider(application.dashboard);
 
-        throw new Error('Unable to retrieve Tye service log.');
-    }
+				if (tyeClient) {
+					return await tyeClient.getLog(service, token);
+				}
+			}
+		}
+
+		throw new Error("Unable to retrieve Tye service log.");
+	}
 }

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { UIExtensionVariables } from '@microsoft/vscode-azext-utils';
+import { UIExtensionVariables } from "@microsoft/vscode-azext-utils";
 
 const ext = {} as UIExtensionVariables;
 
