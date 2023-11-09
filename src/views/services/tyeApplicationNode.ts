@@ -1,82 +1,96 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as path from 'path';
-import * as vscode from 'vscode';
-import TreeNode from '../treeNode';
-import { TyeApplication } from '../../services/tyeApplicationProvider';
-import TyeServiceNode from './tyeServiceNode';
-import { TyeClientProvider } from '../../services/tyeClient';
-import ext from '../../ext';
-import TyeOtherServicesNode from './tyeOtherServicesNode';
+import * as path from "path";
+import * as vscode from "vscode";
+import TreeNode from "../treeNode";
+import { TyeApplication } from "../../services/tyeApplicationProvider";
+import TyeServiceNode from "./tyeServiceNode";
+import { TyeClientProvider } from "../../services/tyeClient";
+import ext from "../../ext";
+import TyeOtherServicesNode from "./tyeOtherServicesNode";
 
 function isConfigurationServiceNode(node: TyeServiceNode): boolean {
-    switch (node.service.serviceSource) {
-        case 'extension':
-        case 'host':
-            return false;
+	switch (node.service.serviceSource) {
+		case "extension":
+		case "host":
+			return false;
 
-        case 'configuration':
-        default:
-                return true;
-    }
+		case "configuration":
+		default:
+			return true;
+	}
 }
 
 export default class TyeApplicationNode implements TreeNode {
-    private readonly id: string;
+	private readonly id: string;
 
-    constructor(public readonly application: TyeApplication, private readonly tyeClientProvider: TyeClientProvider) {
-        this.id = `vscode-tye.views.services.${this.application.id}`;  
-    }
+	constructor(
+		public readonly application: TyeApplication,
+		private readonly tyeClientProvider: TyeClientProvider
+	) {
+		this.id = `vscode-tye.views.services.${this.application.id}`;
+	}
 
-    async getChildren(): Promise<TreeNode[]> {
-        if (!this.application.dashboard) {
-            return [];
-        }
-        
-        const tyeClient = this.tyeClientProvider(this.application.dashboard);
+	async getChildren(): Promise<TreeNode[]> {
+		if (!this.application.dashboard) {
+			return [];
+		}
 
-        if (!tyeClient) {
-            return [];
-        }
+		const tyeClient = this.tyeClientProvider(this.application.dashboard);
 
-        const services = await tyeClient.getServices();
+		if (!tyeClient) {
+			return [];
+		}
 
-        if (!services) {
-            return [];
-        }
+		const services = await tyeClient.getServices();
 
-        const serviceNodes = services.map(service => new TyeServiceNode(this.application, service, this.id));
-        
-        const [configurationServiceNodes, otherServiceNodes] =
-            serviceNodes
-                .reduce<[TyeServiceNode[], TyeServiceNode[]]>(
-                    (acc, serviceNode) => {
-                        acc[isConfigurationServiceNode(serviceNode) ? 0 : 1].push(serviceNode)
+		if (!services) {
+			return [];
+		}
 
-                        return acc;
-                    },
-                    [[], []]);
-        
-        return (<TreeNode[]>[])
-            .concat(configurationServiceNodes)
-            .concat(otherServiceNodes.length > 0 ? [new TyeOtherServicesNode(otherServiceNodes)] : []);
-    }
+		const serviceNodes = services.map(
+			(service) => new TyeServiceNode(this.application, service, this.id)
+		);
 
-    getTreeItem(): vscode.TreeItem {
-        const treeItem = new vscode.TreeItem(this.application.name, vscode.TreeItemCollapsibleState.Expanded);
+		const [configurationServiceNodes, otherServiceNodes] =
+			serviceNodes.reduce<[TyeServiceNode[], TyeServiceNode[]]>(
+				(acc, serviceNode) => {
+					acc[isConfigurationServiceNode(serviceNode) ? 0 : 1].push(
+						serviceNode
+					);
 
-        treeItem.contextValue = 'application';
+					return acc;
+				},
+				[[], []]
+			);
 
-        const resourcesPath = ext.context.asAbsolutePath('resources');
+		return (<TreeNode[]>[])
+			.concat(configurationServiceNodes)
+			.concat(
+				otherServiceNodes.length > 0
+					? [new TyeOtherServicesNode(otherServiceNodes)]
+					: []
+			);
+	}
 
-        treeItem.iconPath = {
-            light: path.join(resourcesPath, 'brand-tye-darkgray.svg'),
-            dark: path.join(resourcesPath, 'brand-tye-white.svg')
-        };
+	getTreeItem(): vscode.TreeItem {
+		const treeItem = new vscode.TreeItem(
+			this.application.name,
+			vscode.TreeItemCollapsibleState.Expanded
+		);
 
-        treeItem.id = this.id;
+		treeItem.contextValue = "application";
 
-        return treeItem;
-    }
+		const resourcesPath = ext.context.asAbsolutePath("resources");
+
+		treeItem.iconPath = {
+			light: path.join(resourcesPath, "brand-tye-darkgray.svg"),
+			dark: path.join(resourcesPath, "brand-tye-white.svg"),
+		};
+
+		treeItem.id = this.id;
+
+		return treeItem;
+	}
 }
