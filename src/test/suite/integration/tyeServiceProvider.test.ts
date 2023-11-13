@@ -1,120 +1,90 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as assert from "assert";
-import * as fs from "fs/promises";
-import * as path from "path";
-import TyeReplicaNode from "../../../views/services/tyeReplicaNode";
-import TyeServiceNode from "../../../views/services/tyeServiceNode";
-import { TyeServicesTreeDataProvider } from "../../../views/services/tyeServicesTreeDataProvider";
-import { TyeClient } from "../../../services/tyeClient";
-import { MockTyeApplicationProvider } from "./mockTyeApplicationProvider";
-import { MockTyeClient } from "./mockTyeClient";
-import MockTyeInstallationManager from "./mockTyeInstallationManager";
-import MockUserInput from "./mockUserInput";
+import * as assert from 'assert';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import TyeReplicaNode from '../../../views/services/tyeReplicaNode';
+import TyeServiceNode from '../../../views/services/tyeServiceNode';
+import { TyeServicesTreeDataProvider } from '../../../views/services/tyeServicesTreeDataProvider';
+import { TyeClient } from '../../../services/tyeClient';
+import { MockTyeApplicationProvider } from './mockTyeApplicationProvider';
+import { MockTyeClient } from './mockTyeClient';
+import MockTyeInstallationManager from './mockTyeInstallationManager';
+import MockUserInput from './mockUserInput';
 
-suite("integration/tyeServiceProvider", () => {
-	const testDataServiceCount = 5;
+suite('integration/tyeServiceProvider', () => {
 
-	async function buildTestClient(): Promise<TyeClient> {
-		const data = JSON.parse(
-			await fs.readFile(
-				path.resolve(
-					__dirname,
-					"../../../../src/test/suite/integration/services.json"
-				),
-				"utf8"
-			)
-		) as TyeService[];
-		return new MockTyeClient(data);
-	}
+    const testDataServiceCount = 5;
 
-	async function buildTestProvider(): Promise<TyeServicesTreeDataProvider> {
-		const testClient = await buildTestClient();
+    async function buildTestClient(): Promise<TyeClient> {
+        const data = JSON.parse(await fs.readFile(path.resolve(__dirname, '../../../../src/test/suite/integration/services.json'), 'utf8')) as  TyeService[];
+        return new MockTyeClient(data);
+    }
 
-		return new TyeServicesTreeDataProvider(
-			new MockTyeApplicationProvider(),
-			() => testClient,
-			new MockTyeInstallationManager(),
-			new MockUserInput()
-		);
-	}
+    async function buildTestProvider(): Promise<TyeServicesTreeDataProvider> {
+        const testClient = await buildTestClient();
 
-	test("TestMockClient", async () => {
-		const tyeClient = await buildTestClient();
+        return new TyeServicesTreeDataProvider(new MockTyeApplicationProvider(), () => testClient, new MockTyeInstallationManager(), new MockUserInput());
+    }
 
-		assert.equal(
-			(await tyeClient.getServices())?.length,
-			testDataServiceCount
-		);
-	});
+    test('TestMockClient', async () => {
+        const tyeClient = await buildTestClient();
 
-	test("TestServicesCollection", async () => {
-		const provider = await buildTestProvider();
+        assert.equal((await tyeClient.getServices())?.length, testDataServiceCount);
+    });
 
-		const applicationItems = await provider.getChildren();
+	test('TestServicesCollection', async () => {
+        const provider = await buildTestProvider();
 
-		assert.equal(applicationItems?.length, 1);
+        const applicationItems = await provider.getChildren();
 
-		const applicationItem = applicationItems[0];
+        assert.equal(applicationItems?.length, 1);
 
-		const serviceItems = await provider.getChildren(applicationItem);
+        const applicationItem = applicationItems[0];
 
-		//Nodes in services.
-		assert.equal(serviceItems?.length, testDataServiceCount);
-	});
+        const serviceItems = await provider.getChildren(applicationItem);
 
-	test("browsableTaggedBrowsable", async () => {
-		const provider = await buildTestProvider();
+        //Nodes in services.
+        assert.equal(serviceItems?.length, testDataServiceCount);
+    });
 
-		const applicationItems = await provider.getChildren();
+    test('browsableTaggedBrowsable', async () => {
+        const provider = await buildTestProvider();
 
-		for (const applicationItem of applicationItems ?? []) {
-			const serviceItems = await provider.getChildren(applicationItem);
+        const applicationItems = await provider.getChildren();
 
-			for (const serviceItem of serviceItems ?? []) {
-				const children = await provider.getChildren(serviceItem);
+        for(const applicationItem of applicationItems?? []) {
+            const serviceItems = await provider.getChildren(applicationItem);
+            
+            for(const serviceItem of serviceItems ?? []) {
+                const children = await provider.getChildren(serviceItem);
 
-				for (const replica of children ?? []) {
-					const treeItem = await replica.getTreeItem();
-					if (
-						replica instanceof TyeReplicaNode &&
-						replica.isBrowsable
-					) {
-						assert.equal(
-							true,
-							treeItem?.contextValue?.includes("browsable")
-						);
-					} else {
-						assert.equal(
-							true,
-							!treeItem?.contextValue?.includes("browsable")
-						);
-					}
-				}
-			}
-		}
-	});
+                for(const replica of children ?? []) {
+                    const treeItem = await replica.getTreeItem();
+                    if(replica instanceof TyeReplicaNode && replica.isBrowsable) {
+                        assert.equal(true, treeItem?.contextValue?.includes('browsable'));
+                    } else {
+                        assert.equal(true, !treeItem?.contextValue?.includes('browsable'));
+                    }
+                }
+            }
+        }
+    });
 
-	test("containersAreNotAttachable", async () => {
-		const provider = await buildTestProvider();
+    test('containersAreNotAttachable', async () => {
+        const provider = await buildTestProvider();
 
-		const treeItems = await provider.getChildren();
+        const treeItems = await provider.getChildren();
 
-		for (const node of treeItems ?? []) {
-			const children = await provider.getChildren(node as TyeServiceNode);
-			for (const replica of children ?? []) {
-				const treeItem = await replica.getTreeItem();
-				if (
-					replica instanceof TyeReplicaNode &&
-					replica.service.serviceType == "container"
-				) {
-					assert.equal(
-						false,
-						treeItem.contextValue?.includes("attachable")
-					);
-				}
-			}
-		}
-	});
+        for(const node of treeItems ?? []) {
+            const children = await provider.getChildren(node as TyeServiceNode);
+            for(const replica of children ?? []) {
+                const treeItem = await replica.getTreeItem();
+                if(replica instanceof TyeReplicaNode && replica.service.serviceType == 'container') {
+                    assert.equal(false, treeItem.contextValue?.includes('attachable'));
+                }
+            }
+        }
+    });
 });

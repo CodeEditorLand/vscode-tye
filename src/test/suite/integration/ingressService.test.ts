@@ -1,96 +1,72 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as assert from "assert";
-import * as fs from "fs/promises";
-import * as path from "path";
-import TyeReplicaNode from "../../../views/services/tyeReplicaNode";
-import { TyeServicesTreeDataProvider } from "../../../views/services/tyeServicesTreeDataProvider";
-import { TyeClient } from "../../../services/tyeClient";
-import { MockTyeApplicationProvider } from "./mockTyeApplicationProvider";
-import { MockTyeClient } from "./mockTyeClient";
-import MockTyeInstallationManager from "./mockTyeInstallationManager";
-import MockUserInput from "./mockUserInput";
+import * as assert from 'assert';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import TyeReplicaNode from '../../../views/services/tyeReplicaNode';
+import { TyeServicesTreeDataProvider } from '../../../views/services/tyeServicesTreeDataProvider';
+import { TyeClient } from '../../../services/tyeClient';
+import { MockTyeApplicationProvider } from './mockTyeApplicationProvider';
+import { MockTyeClient } from './mockTyeClient';
+import MockTyeInstallationManager from './mockTyeInstallationManager';
+import MockUserInput from './mockUserInput';
 
-suite("integration/ingressServiceTests", () => {
-	const testDataServiceCount = 3;
+suite('integration/ingressServiceTests', () => {
 
-	async function buildTestClient(): Promise<TyeClient> {
-		const data = JSON.parse(
-			await fs.readFile(
-				path.resolve(
-					__dirname,
-					"../../../../src/test/suite/integration/ingressServices.json"
-				),
-				"utf8"
-			)
-		) as TyeService[];
-		return new MockTyeClient(data);
-	}
+    const testDataServiceCount = 3;
 
-	async function buildTestProvider(): Promise<TyeServicesTreeDataProvider> {
-		const testClient = await buildTestClient();
-		return new TyeServicesTreeDataProvider(
-			new MockTyeApplicationProvider(),
-			() => testClient,
-			new MockTyeInstallationManager(),
-			new MockUserInput()
-		);
-	}
+    async function buildTestClient(): Promise<TyeClient> {
+        const data = JSON.parse(await fs.readFile(path.resolve(__dirname, '../../../../src/test/suite/integration/ingressServices.json'), 'utf8')) as TyeService[];
+        return new MockTyeClient(data);
+    }
 
-	test("TestMockClient", async () => {
-		const tyeClient = await buildTestClient();
+    async function buildTestProvider(): Promise<TyeServicesTreeDataProvider> {
+        const testClient = await buildTestClient();
+        return new TyeServicesTreeDataProvider(new MockTyeApplicationProvider(), () => testClient, new MockTyeInstallationManager(), new MockUserInput());
+    }
 
-		assert.equal(
-			(await tyeClient.getServices())?.length,
-			testDataServiceCount
-		);
-	});
+    test('TestMockClient', async () => {
+        const tyeClient = await buildTestClient();
 
-	test("TestServicesCollection", async () => {
-		const provider = await buildTestProvider();
+        assert.equal((await tyeClient.getServices())?.length, testDataServiceCount);
+    });
 
-		const treeItems = await provider.getChildren();
+	test('TestServicesCollection', async () => {
+        const provider = await buildTestProvider();
 
-		assert.equal(treeItems?.length, 1);
+        const treeItems = await provider.getChildren();
 
-		const applicationTreeItem = treeItems[0];
+        assert.equal(treeItems?.length, 1);
 
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		const serviceTreeItems = await applicationTreeItem.getChildren!();
+        const applicationTreeItem = treeItems[0];
 
-		//Nodes in services.
-		assert.equal(serviceTreeItems?.length, testDataServiceCount);
-	});
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const serviceTreeItems = await applicationTreeItem.getChildren!();
 
-	test("ingressIsBrowsable", async () => {
-		const provider = await buildTestProvider();
+        //Nodes in services.
+        assert.equal(serviceTreeItems?.length, testDataServiceCount);
+    });
 
-		const applicationItems = await provider.getChildren();
+    test('ingressIsBrowsable', async () => {
+        const provider = await buildTestProvider();
 
-		for (const applicationItem of applicationItems ?? []) {
-			const serviceItems = await provider.getChildren(applicationItem);
+        const applicationItems = await provider.getChildren();
 
-			for (const serviceItem of serviceItems ?? []) {
-				const children = await provider.getChildren(serviceItem);
+        for(const applicationItem of applicationItems ?? []) {
+            const serviceItems = await provider.getChildren(applicationItem);
 
-				for (const replica of children ?? []) {
-					if (
-						replica instanceof TyeReplicaNode &&
-						replica.service.serviceType == "ingress"
-					) {
-						const treeItem = replica.getTreeItem();
-						assert.equal(
-							true,
-							treeItem.contextValue?.includes("browsable")
-						);
-						assert.equal(
-							false,
-							treeItem.contextValue?.includes("attachable")
-						);
-					}
-				}
-			}
-		}
-	});
+            for(const serviceItem of serviceItems ?? []) {
+                const children = await provider.getChildren(serviceItem);
+
+                for(const replica of children ?? []) {
+                    if(replica instanceof TyeReplicaNode && replica.service.serviceType == 'ingress') {
+                        const treeItem = replica.getTreeItem();
+                        assert.equal(true, treeItem.contextValue?.includes('browsable'));
+                        assert.equal(false, treeItem.contextValue?.includes('attachable'));
+                    }
+                }
+            }
+        }
+    });
 });

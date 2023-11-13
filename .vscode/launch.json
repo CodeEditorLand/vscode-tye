@@ -9,11 +9,15 @@
 			"name": "Run Extension",
 			"type": "extensionHost",
 			"request": "launch",
-			"args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}"
+			],
 			"env": {
 				"DEBUGTELEMETRY": "1"
 			},
-			"outFiles": ["${workspaceFolder}/dist/**/*.js"],
+			"outFiles": [
+				"${workspaceFolder}/dist/**/*.js"
+			],
 			"preLaunchTask": "${defaultBuildTask}"
 		},
 		{
@@ -28,7 +32,9 @@
 			"env": {
 				"DEBUGTELEMETRY": "1"
 			},
-			"outFiles": ["${workspaceFolder}/out/test/**/*.js"],
+			"outFiles": [
+				"${workspaceFolder}/out/test/**/*.js"
+			],
 			"preLaunchTask": "npm: build-test"
 		}
 	]
