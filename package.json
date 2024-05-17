@@ -1,27 +1,7 @@
 {
 	"name": "vscode-tye",
 	"displayName": "Tye",
-	"version": "0.0.1",
-	"private": false,
 	"description": "Makes it easy to debug and interact with applications using Tye.",
-	"keywords": [
-		"land"
-	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandTye#readme",
-	"bugs": {
-		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandTye/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+HTTPS://github.com/CodeEditorLand/LandTye.git"
-	},
-	"license": "SEE LICENSE IN LICENSE",
-	"author": {
-		"name": "🛬 Land —",
-		"email": "Land@PlayForm.Cloud",
-		"url": "HTTPS://Land.PlayForm.Cloud"
-	},
-	"type": "module",
 	"main": "./main.js",
 	"scripts": {
 		"Document": "Document 'Source/**/*.ts'",
@@ -402,7 +382,6 @@
 	},
 	"devDependencies": {
 		"@playform/build": "0.0.7",
-		"@playform/document": "0.0.6",
 		"@types/glob": "8.1.0",
 		"@types/js-yaml": "4.0.9",
 		"@types/node": "20.12.10",
@@ -411,9 +390,6 @@
 		"@types/semver": "7.5.8",
 		"glob": "10.3.12",
 		"ts-loader": "9.5.1"
-	},
-	"publishConfig": {
-		"access": "public"
 	},
 	"icon": "resources/brand-tye_128x.png",
 	"preview": true,
