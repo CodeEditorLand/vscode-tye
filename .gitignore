@@ -3,6 +3,4 @@ out
 .vscode-test/
 package.nls.*.json
 *.vsix
-yarn-error.log
 # Mac desktop service store files
-.DS_Store

@@ -370,7 +370,7 @@
 		"onView:vscode-tye.views.services"
 	],
 	"dependencies": {
-		"axios": "1.7.1",
+		"axios": "1.7.2",
 		"js-yaml": "4.1.0",
 		"node-netstat": "1.9.0",
 		"ps-list": "8.1.1",
@@ -385,7 +385,7 @@
 		"@types/node-netstat": "1.8.4",
 		"@types/ps-tree": "1.1.6",
 		"@types/semver": "7.5.8",
-		"glob": "10.3.15",
+		"glob": "10.3.16",
 		"ts-loader": "9.5.1"
 	},
 	"icon": "resources/brand-tye_128x.png",
