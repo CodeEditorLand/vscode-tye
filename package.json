@@ -360,7 +360,7 @@
 		]
 	},
 	"dependencies": {
-		"axios": "1.7.4",
+		"axios": "1.7.5",
 		"js-yaml": "4.1.0",
 		"node-netstat": "1.9.0",
 		"ps-list": "8.1.1",
@@ -372,7 +372,7 @@
 	"devDependencies": {
 		"@types/glob": "8.1.0",
 		"@types/js-yaml": "4.0.9",
-		"@types/node": "22.4.0",
+		"@types/node": "22.5.0",
 		"@types/node-netstat": "1.8.4",
 		"@types/ps-tree": "1.1.6",
 		"@types/semver": "7.5.8",
