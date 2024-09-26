@@ -381,7 +381,7 @@
 	"devDependencies": {
 		"@types/glob": "8.1.0",
 		"@types/js-yaml": "4.0.9",
-		"@types/node": "22.6.0",
+		"@types/node": "22.7.2",
 		"@types/node-netstat": "1.8.4",
 		"@types/ps-tree": "1.1.6",
 		"@types/semver": "7.5.8",
