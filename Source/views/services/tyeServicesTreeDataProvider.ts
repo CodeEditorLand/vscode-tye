@@ -1,66 +1,86 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as vscode from 'vscode';
-import { TyeApplication, TyeApplicationProvider } from '../../services/tyeApplicationProvider';
-import { Subscription } from 'rxjs';
-import TreeNode from '../treeNode';
-import TyeApplicationNode from './tyeApplicationNode';
-import { TyeClientProvider } from '../../services/tyeClient';
-import { TyeInstallationManager } from '../../services/tyeInstallationManager';
-import { UserInput } from '../../services/userInput';
+import { Subscription } from "rxjs";
+import * as vscode from "vscode";
 
-export class TyeServicesTreeDataProvider extends vscode.Disposable implements vscode.TreeDataProvider<TreeNode> {
-    private readonly onDidChangeTreeDataEmitter = new vscode.EventEmitter<void | TreeNode | null | undefined>();
-    private readonly listener: Subscription;
-    private cachedApplications: TyeApplication[] = [];
+import {
+	TyeApplication,
+	TyeApplicationProvider,
+} from "../../services/tyeApplicationProvider";
+import { TyeClientProvider } from "../../services/tyeClient";
+import { TyeInstallationManager } from "../../services/tyeInstallationManager";
+import { UserInput } from "../../services/userInput";
+import TreeNode from "../treeNode";
+import TyeApplicationNode from "./tyeApplicationNode";
 
-    constructor(
-        tyeApplicationProvider: TyeApplicationProvider,
-        private readonly tyeClientProvider: TyeClientProvider,
-        private readonly tyeInstallationManager: TyeInstallationManager,
-        private readonly ui: UserInput) {
-        super(
-            () => {
-                this.listener.unsubscribe();
-            });
+export class TyeServicesTreeDataProvider
+	extends vscode.Disposable
+	implements vscode.TreeDataProvider<TreeNode>
+{
+	private readonly onDidChangeTreeDataEmitter = new vscode.EventEmitter<
+		void | TreeNode | null | undefined
+	>();
+	private readonly listener: Subscription;
+	private cachedApplications: TyeApplication[] = [];
 
-            this.listener = tyeApplicationProvider.applications.subscribe(
-                applications => {
-                    this.cachedApplications =
-                        applications
-                            .slice()
-                            .sort((a, b) => a.name.localeCompare(b.name));
-                    
-                    this.refresh();
-                });
-            }
+	constructor(
+		tyeApplicationProvider: TyeApplicationProvider,
+		private readonly tyeClientProvider: TyeClientProvider,
+		private readonly tyeInstallationManager: TyeInstallationManager,
+		private readonly ui: UserInput,
+	) {
+		super(() => {
+			this.listener.unsubscribe();
+		});
 
-    readonly onDidChangeTreeData?: vscode.Event<void | TreeNode | null | undefined> | undefined = this.onDidChangeTreeDataEmitter.event;
+		this.listener = tyeApplicationProvider.applications.subscribe(
+			(applications) => {
+				this.cachedApplications = applications
+					.slice()
+					.sort((a, b) => a.name.localeCompare(b.name));
 
-    getTreeItem(element: TreeNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        return element.getTreeItem();
-    }
+				this.refresh();
+			},
+		);
+	}
 
-    async getChildren(element?: TreeNode): Promise<TreeNode[]> {
-        let children: TreeNode[] = [];
+	readonly onDidChangeTreeData?:
+		| vscode.Event<void | TreeNode | null | undefined>
+		| undefined = this.onDidChangeTreeDataEmitter.event;
 
-        if (element) {
-            children = await element.getChildren?.() ?? [];
-        } else {
-            children = this.cachedApplications.map(application => new TyeApplicationNode(application, this.tyeClientProvider));
-        }
+	getTreeItem(
+		element: TreeNode,
+	): vscode.TreeItem | Thenable<vscode.TreeItem> {
+		return element.getTreeItem();
+	}
 
-        if (children.length === 0) {
-            const isInstalled = await this.tyeInstallationManager.isInstalled();
+	async getChildren(element?: TreeNode): Promise<TreeNode[]> {
+		let children: TreeNode[] = [];
 
-            await this.ui.executeCommand('setContext', 'vscode-tye.views.services.state', isInstalled ? 'notRunning' : 'notInstalled');
-        }
+		if (element) {
+			children = (await element.getChildren?.()) ?? [];
+		} else {
+			children = this.cachedApplications.map(
+				(application) =>
+					new TyeApplicationNode(application, this.tyeClientProvider),
+			);
+		}
 
-        return children;
-    }
+		if (children.length === 0) {
+			const isInstalled = await this.tyeInstallationManager.isInstalled();
 
-    refresh(): void {
-        this.onDidChangeTreeDataEmitter.fire();
-    }
+			await this.ui.executeCommand(
+				"setContext",
+				"vscode-tye.views.services.state",
+				isInstalled ? "notRunning" : "notInstalled",
+			);
+		}
+
+		return children;
+	}
+
+	refresh(): void {
+		this.onDidChangeTreeDataEmitter.fire();
+	}
 }
