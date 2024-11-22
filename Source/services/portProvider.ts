@@ -16,6 +16,7 @@ function lsofCommandParser(
 	callback: (item: netstat.ParsedItem) => void,
 ): void {
 	const parts = line.split(/\s/).filter(String);
+
 	if (!parts.length || (parts.length !== 9 && parts.length !== 10)) {
 		// We expect 9 or 10 columns of data; bail when not found...
 		return;

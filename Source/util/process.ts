@@ -55,11 +55,13 @@ export class Process extends vscode.Disposable {
 		const process = new Process();
 
 		let stdoutBytesWritten = 0;
+
 		let stderrBytesWritten = 0;
 
 		const stdoutBuffer = Buffer.alloc(
 			(options && options.maxBuffer) || DEFAULT_BUFFER_SIZE,
 		);
+
 		const stderrBuffer = Buffer.alloc(
 			(options && options.maxBuffer) || DEFAULT_BUFFER_SIZE,
 		);

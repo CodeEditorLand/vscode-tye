@@ -80,14 +80,18 @@ export function activate(context: vscode.ExtensionContext): Promise<void> {
 			const httpClient = new AxiosHttpClient();
 
 			const tyeClientProvider = httpTyeClientProvider(httpClient);
+
 			const settingsProvider = new VsCodeSettingsProvider();
+
 			const tyePathProvider = new LocalTyePathProvider(settingsProvider);
+
 			const tyeProcessProvider = new LocalTyeProcessProvider(
 				new LocalPortProvider(),
 				createPlatformProcessProvider(),
 				tyeClientProvider,
 				tyePathProvider,
 			);
+
 			const tyeApplicationProvider = new TaskBasedTyeApplicationProvider(
 				tyeProcessProvider,
 				tyeClientProvider,
@@ -108,10 +112,13 @@ export function activate(context: vscode.ExtensionContext): Promise<void> {
 			const extensionPackage = <ExtensionPackage>(
 				context.extension.packageJSON
 			);
+
 			const tyeCliClient = new LocalTyeCliClient(() =>
 				tyePathProvider.getTyePath(),
 			);
+
 			const ui = new AggregateUserInput(actionContext.ui);
+
 			const tyeInstallationManager = new LocalTyeInstallationManager(
 				extensionPackage.engines["tye"],
 				tyeCliClient,
@@ -187,6 +194,7 @@ export function activate(context: vscode.ExtensionContext): Promise<void> {
 			);
 
 			const scaffolder = new LocalScaffolder();
+
 			const tyeApplicationConfigurationProvider =
 				new WorkspaceTyeApplicationConfigurationProvider(
 					new YamlTyeApplicationConfigurationReader(),

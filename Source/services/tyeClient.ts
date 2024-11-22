@@ -7,11 +7,14 @@ import { HttpClient } from "./httpClient";
 
 export interface TyeClient {
 	getApplication(token?: vscode.CancellationToken): Promise<TyeApplication>;
+
 	getEndpoints(token?: vscode.CancellationToken): Promise<string[]>;
+
 	getLog(
 		serviceName: string,
 		token?: vscode.CancellationToken,
 	): Promise<string>;
+
 	getServices(
 		token?: vscode.CancellationToken,
 	): Promise<TyeService[] | undefined>;
@@ -36,6 +39,7 @@ export class HttpTyeClient implements TyeClient {
 			`${this.apiEndpoint}/application`,
 			token,
 		);
+
 		return resp.data as TyeApplication;
 	}
 
@@ -43,6 +47,7 @@ export class HttpTyeClient implements TyeClient {
 		token?: vscode.CancellationToken,
 	): Promise<string[]> {
 		const resp = await this.httpClient.get(`${this.apiEndpoint}`, token);
+
 		return resp.data as string[];
 	}
 
@@ -54,7 +59,9 @@ export class HttpTyeClient implements TyeClient {
 			`${this.apiEndpoint}/logs/${serviceName}`,
 			token,
 		);
+
 		const ar: string[] = resp.data as string[];
+
 		return ar.join("\n");
 	}
 
@@ -65,6 +72,7 @@ export class HttpTyeClient implements TyeClient {
 			`${this.apiEndpoint}/services`,
 			token,
 		);
+
 		return resp.data as TyeService[];
 	}
 

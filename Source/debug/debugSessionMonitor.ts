@@ -8,6 +8,7 @@ export interface DebugSessionMonitor {
 }
 
 const coreClrDebugSessionType = "coreclr";
+
 const coreClrDebugRequestType = "attach";
 
 export class CoreClrDebugSessionMonitor

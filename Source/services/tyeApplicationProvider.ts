@@ -42,6 +42,7 @@ function serviceComparer(x: TyeProjectService, y: TyeProjectService): boolean {
 	const xReplicas = Object.keys(x.replicas)
 		.map((name) => ({ name, replica: x.replicas[name] }))
 		.sort(nameSorter);
+
 	const yReplicas = Object.keys(y.replicas)
 		.map((name) => ({ name, replica: y.replicas[name] }))
 		.sort(nameSorter);
@@ -52,6 +53,7 @@ function serviceComparer(x: TyeProjectService, y: TyeProjectService): boolean {
 
 	for (let i = 0; i < xReplicas.length; i++) {
 		const xiReplica = xReplicas[i].replica;
+
 		const yiReplica = yReplicas[i].replica;
 
 		if (xiReplica !== yiReplica) {
@@ -86,6 +88,7 @@ export function applicationComparer(
 	const xServices = Object.keys(x.projectServices)
 		.map((name) => ({ name, service: x.projectServices[name] }))
 		.sort(nameSorter);
+
 	const yServices = Object.keys(y.projectServices)
 		.map((name) => ({ name, service: y.projectServices[name] }))
 		.sort(nameSorter);
@@ -96,6 +99,7 @@ export function applicationComparer(
 
 	for (let j = 0; j < xServices.length; j++) {
 		const xijService = xServices[j];
+
 		const yijService = yServices[j];
 
 		if (
@@ -186,12 +190,14 @@ export class TaskBasedTyeApplicationProvider implements TyeApplicationProvider {
 								}>((replicaMap, replicaName) => {
 									replicaMap[replicaName] =
 										service.replicas[replicaName].pid;
+
 									return replicaMap;
 								}, {}),
 								serviceType: <KnownServiceType>(
 									service.serviceType
 								),
 							};
+
 							return serviceMap;
 						},
 						{},

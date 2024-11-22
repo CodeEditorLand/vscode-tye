@@ -23,6 +23,7 @@ export interface TyeProcessWithPorts {
 
 export interface TyeProcessProvider {
 	readonly processes: Observable<TyeProcess[]>;
+
 	getProcesses(): Promise<TyeProcess[]>;
 }
 
@@ -111,6 +112,7 @@ export default class LocalTyeProcessProvider implements TyeProcessProvider {
 
 	private async getTyeProcessesWithPorts(): Promise<TyeProcessWithPorts[]> {
 		const tyePath = await this.tyePathProvider.getTyePath();
+
 		const tyeProcesses = await this.processProvider.listProcesses(tyePath);
 
 		return await Promise.all(
@@ -149,6 +151,7 @@ export default class LocalTyeProcessProvider implements TyeProcessProvider {
 	): Promise<TyeProcess | undefined> {
 		for (const port of process.ports) {
 			const dashboardUri = vscode.Uri.parse(`http://localhost:${port}`);
+
 			const client = this.tyeClientProvider(dashboardUri);
 
 			if (client) {

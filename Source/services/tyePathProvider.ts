@@ -30,6 +30,7 @@ export default class LocalTyePathProvider implements TyePathProvider {
 	private async tryGetTyePath(): Promise<string> {
 		try {
 			const tyePath = "tye";
+
 			const tyeCliClient = new LocalTyeCliClient(() =>
 				Promise.resolve(tyePath),
 			);

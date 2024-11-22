@@ -41,10 +41,12 @@ export class TyeLogDocumentContentProvider
 
 		if (splitPath.length >= 3) {
 			const applicationId = splitPath[1];
+
 			const service = splitPath[2];
 
 			const applications =
 				await this.tyeApplicationProvider.getApplications();
+
 			const application = applications.find(
 				(app) => app.id === applicationId,
 			);

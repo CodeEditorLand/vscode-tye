@@ -38,6 +38,7 @@ async function promptToOverwriteTyeYamlIfNecessary(
 				"Overwrite",
 			),
 		};
+
 		const result = await ui.showWarningMessage(
 			localize(
 				"commands.scaffolding.initTye.tyeYamlExists",
@@ -52,6 +53,7 @@ async function promptToOverwriteTyeYamlIfNecessary(
 			// Since the function matches .yml and .yaml files, it could lead to a situation where tye.yml is already present,
 			// and tye-init creates tye.yaml causing the user to have both tye.yaml and tye.yml files.
 			await vscode.workspace.fs.delete(existingTyeYamlFiles[0]);
+
 			return true;
 		}
 
@@ -92,12 +94,14 @@ export async function initializeTye(
 		folder,
 		ui,
 	);
+
 	if (shouldInvokeTyeInit) {
 		await tyeCliClient.init({ force: true, path: folder.uri.fsPath });
 	}
 
 	const configurations =
 		await tyeApplicationConfigurationProvider.getConfigurations();
+
 	const configuration = configurations[0];
 
 	if (configuration) {

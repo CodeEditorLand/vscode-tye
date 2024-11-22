@@ -33,7 +33,9 @@ export function getReplicaBrowseUrl(
 	}
 
 	let host = "localhost";
+
 	let port = replica.ports[0];
+
 	let protocol = "http";
 
 	//We want to prefer the environment variable so that it matches as closely as possible to GetServiceUri.

@@ -24,6 +24,7 @@ async function createUniqueName(
 	isUnique: ConflictUniquenessPredicate,
 ): Promise<string> {
 	const nameGenerator = names(prefix, range(1));
+
 	let name = nameGenerator.next();
 
 	while (!name.done && !(await isUnique(name.value))) {
@@ -74,6 +75,7 @@ export async function scaffoldTyeTasks(
 	}
 
 	const workspaceConfiguration = configurations[0];
+
 	const configuration = await workspaceConfiguration.getConfiguration();
 
 	const onTaskConflict: ConflictHandler = async (label, isUnique) => {
@@ -83,6 +85,7 @@ export async function scaffoldTyeTasks(
 				"Overwrite",
 			),
 		};
+
 		const newTask: vscode.MessageItem = {
 			title: localize(
 				"commands.scaffolding.scaffoldTyeTasks.createTask",
@@ -157,6 +160,7 @@ export async function scaffoldTyeTasks(
 					"Overwrite",
 				),
 			};
+
 			const newConfiguration: vscode.MessageItem = {
 				title: localize(
 					"commands.scaffolding.scaffoldTyeTasks.createConfiguration",

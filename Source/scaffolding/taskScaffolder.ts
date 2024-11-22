@@ -29,6 +29,7 @@ export default async function scaffoldTask(
 		"tasks",
 		folder.uri,
 	);
+
 	const workspaceTasks: TaskDefinition[] =
 		<TaskDefinition[]>workspaceConfigurations.tasks ?? [];
 
@@ -36,6 +37,7 @@ export default async function scaffoldTask(
 
 	const getConflictingIndex = (targetLabel: string): number =>
 		workspaceTasks.findIndex((task) => task.label === targetLabel);
+
 	const conflictingTaskIndex = getConflictingIndex(label);
 
 	if (conflictingTaskIndex >= 0) {
@@ -47,10 +49,14 @@ export default async function scaffoldTask(
 		switch (result.type) {
 			case "overwrite":
 				taskIndex = conflictingTaskIndex;
+
 				break;
+
 			case "rename":
 				label = result.name;
+
 				break;
+
 			case "skip":
 				return undefined;
 		}

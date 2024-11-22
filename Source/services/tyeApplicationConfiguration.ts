@@ -49,6 +49,7 @@ export class WorkspaceTyeApplicationConfigurationProvider
 			folder: vscode.workspace.getWorkspaceFolder(file)!,
 			getConfiguration: async () => {
 				const content = await vscode.workspace.fs.readFile(file);
+
 				const contentString = new TextDecoder("utf8").decode(content);
 
 				let configuration =

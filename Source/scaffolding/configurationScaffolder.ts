@@ -33,6 +33,7 @@ export default async function scaffoldConfiguration(
 		"launch",
 		folder.uri,
 	);
+
 	const workspaceConfigurations: DebugConfiguration[] =
 		<DebugConfiguration[]>workspaceConfiguration.configurations ?? [];
 
@@ -42,6 +43,7 @@ export default async function scaffoldConfiguration(
 		workspaceConfigurations.findIndex(
 			(configuration) => configuration.name === targetName,
 		);
+
 	const conflictingConfigurationIndex = getConflictingIndex(name);
 
 	if (conflictingConfigurationIndex >= 0) {
@@ -52,10 +54,14 @@ export default async function scaffoldConfiguration(
 		switch (result.type) {
 			case "overwrite":
 				configurationIndex = conflictingConfigurationIndex;
+
 				break;
+
 			case "rename":
 				name = result.name;
+
 				break;
+
 			case "skip":
 				return undefined;
 		}

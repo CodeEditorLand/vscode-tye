@@ -34,6 +34,7 @@ export class UnixProcessProvider implements ProcessProvider {
 		const processes = await psList();
 
 		const fileName = path.basename(filePath);
+
 		const regex = new RegExp(`^(?<path>.*/${fileName}) `);
 
 		return processes

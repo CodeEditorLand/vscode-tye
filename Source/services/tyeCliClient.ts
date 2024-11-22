@@ -25,6 +25,7 @@ export default class LocalTyeCliClient implements TyeCliClient {
 
 	async init(options?: InitOptions): Promise<void> {
 		const tyePath = await this.tyePathProvider();
+
 		const command = CommandLineBuilder.create(tyePath, "init")
 			.withFlagArg("--force", options?.force === true)
 			.withFlagArg("--no-default", options?.noDefault === true)
@@ -46,6 +47,7 @@ export default class LocalTyeCliClient implements TyeCliClient {
 
 	async version(): Promise<string> {
 		const tyePath = await this.tyePathProvider();
+
 		const command = CommandLineBuilder.create(tyePath, "--version").build();
 
 		const result = await Process.exec(command);

@@ -21,6 +21,7 @@ export interface TyeRunTaskDefinition extends TaskDefinition {
 	build?: boolean;
 	dashboard?: boolean;
 	debug?: "*" | string | string[];
+
 	docker?: boolean;
 	dtrace?: TyeDistributedTraceProvider;
 	framework?: string;
@@ -57,6 +58,7 @@ export default class TyeRunCommandTaskProvider extends CommandTaskProvider {
 						);
 
 						const tyeDefinition = <TyeRunTaskDefinition>definition;
+
 						const tyePath = await tyePathProvider.getTyePath();
 
 						const command = CommandLineBuilder.create(
@@ -94,6 +96,7 @@ export default class TyeRunCommandTaskProvider extends CommandTaskProvider {
 									if (tyePid !== undefined) {
 										const applications =
 											await tyeApplicationProvider.getApplications();
+
 										const application = applications.find(
 											(application) =>
 												application.pid === tyePid,
@@ -106,6 +109,7 @@ export default class TyeRunCommandTaskProvider extends CommandTaskProvider {
 
 											if (tyeClient) {
 												await tyeClient.shutDown();
+
 												const tyeProcessShutdownTimeout =
 													60 * 1000; // set timeout to be 1 minute for the tye process to shutdown.
 												return {
@@ -124,6 +128,7 @@ export default class TyeRunCommandTaskProvider extends CommandTaskProvider {
 							onStdOut: (stdOut) => {
 								const matchingLogLine =
 									tyeAppStartedRegex.exec(stdOut);
+
 								if (matchingLogLine != null) {
 									tyePid = parseInt(matchingLogLine[1], 10);
 								}
