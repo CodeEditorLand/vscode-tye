@@ -23,6 +23,7 @@ export type CommandTaskSpawnCallback = (
 	command: string,
 	options?: CommandTaskSpawnOptions,
 ) => Promise<void>;
+
 export type CommandTaskProviderCallback = (
 	name: string,
 	definition: TaskDefinition,

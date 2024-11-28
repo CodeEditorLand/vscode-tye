@@ -14,7 +14,9 @@ import { ProcessCancellationOptions } from "../util/process";
 import CommandTaskProvider from "./commandTaskProvider";
 
 export type TyeLogProvider = "console" | "elastic" | "ai" | "seq";
+
 export type TyeDistributedTraceProvider = "zipkin";
+
 export type TyeVerbosity = "Debug" | "Info" | "Quiet";
 
 export interface TyeRunTaskDefinition extends TaskDefinition {
