@@ -10,7 +10,9 @@ import { Process } from "../util/process";
 
 export interface ProcessInfo {
 	cmd: string;
+
 	name: string;
+
 	pid: number;
 }
 
@@ -69,7 +71,9 @@ export class UnixProcessProvider implements ProcessProvider {
 
 interface WmiWin32ProcessObject {
 	readonly CommandLine: string | null;
+
 	readonly Name: string;
+
 	readonly ProcessId: number;
 }
 

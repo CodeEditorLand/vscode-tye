@@ -59,6 +59,7 @@ export default class TyeServiceNode implements TyeNode {
 		);
 
 		treeItem.contextValue = this.service.serviceType;
+
 		treeItem.contextValue += " hasLogs service";
 
 		treeItem.id = this.id;

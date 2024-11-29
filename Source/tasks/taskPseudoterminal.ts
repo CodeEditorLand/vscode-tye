@@ -22,8 +22,10 @@ export default class TaskPseudoterminal
 {
 	private readonly closeEmitter: vscode.EventEmitter<number | void> =
 		new vscode.EventEmitter<number | void>();
+
 	private readonly writeEmitter: vscode.EventEmitter<string> =
 		new vscode.EventEmitter<string>();
+
 	private readonly cts: vscode.CancellationTokenSource =
 		new vscode.CancellationTokenSource();
 
@@ -32,12 +34,15 @@ export default class TaskPseudoterminal
 			this.close();
 
 			this.closeEmitter.dispose();
+
 			this.writeEmitter.dispose();
+
 			this.cts.dispose();
 		});
 	}
 
 	readonly onDidClose: vscode.Event<number | void> = this.closeEmitter.event;
+
 	public readonly onDidWrite: vscode.Event<string> = this.writeEmitter.event;
 
 	open(): void {
@@ -64,6 +69,7 @@ export default class TaskPseudoterminal
 
 	private closeWithValue(value: number | void): void {
 		this.cts.cancel();
+
 		this.closeEmitter.fire(value);
 	}
 }

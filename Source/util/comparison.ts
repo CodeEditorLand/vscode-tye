@@ -12,6 +12,7 @@ export function arrayComparer<T>(
 	}
 
 	x = x.slice().sort(sorter);
+
 	y = y.slice().sort(sorter);
 
 	for (let i = 0; i < x.length; i++) {

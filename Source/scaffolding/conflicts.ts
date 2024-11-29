@@ -7,6 +7,7 @@ export interface OverwriteResult {
 
 export interface RenameResult {
 	type: "rename";
+
 	name: string;
 }
 

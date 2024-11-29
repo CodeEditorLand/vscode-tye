@@ -12,7 +12,9 @@ import * as vscode from "vscode";
 
 interface WizardOptions<T> {
 	hideStepCount?: boolean;
+
 	initialContext?: Partial<T>;
+
 	title: string;
 }
 
@@ -22,22 +24,29 @@ export interface WizardStep<T> {
 
 export interface UserInput {
 	executeCommand(command: string, ...rest: unknown[]): Promise<void>;
+
 	openExternal(url: string): Promise<boolean>;
+
 	showInputBox(options: vscode.InputBoxOptions): Promise<string>;
+
 	showIssueReporter(): Promise<void>;
+
 	showQuickPick<T extends vscode.QuickPickItem>(
 		items: T[] | Thenable<T[]>,
 		options: IAzureQuickPickOptions,
 	): Promise<T>;
+
 	showWarningMessage<T extends vscode.MessageItem>(
 		message: string,
 		options: vscode.MessageOptions,
 		...items: T[]
 	): Promise<T>;
+
 	showWizard<T>(
 		options: WizardOptions<T>,
 		...steps: (WizardStep<T> | undefined)[]
 	): Promise<T>;
+
 	withProgress<T>(
 		title: string,
 		task: (
@@ -150,6 +159,7 @@ export class AggregateUserInput implements UserInput {
 		task: (
 			progress: vscode.Progress<{
 				message?: string | undefined;
+
 				increment?: number | undefined;
 			}>,
 			token: vscode.CancellationToken,

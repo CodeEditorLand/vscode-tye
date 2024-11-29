@@ -26,23 +26,29 @@ function bufferToString(buffer: Buffer): string {
 
 export interface ProcessCancellationOptions {
 	readonly waitForProcessClose: boolean;
+
 	readonly waitForProcessCloseTimeout?: number;
 }
 
 export class Process extends vscode.Disposable {
 	private readonly onStartedEmitter = new vscode.EventEmitter<number>();
+
 	private readonly onStdErrEmitter = new vscode.EventEmitter<string>();
+
 	private readonly onStdOutEmitter = new vscode.EventEmitter<string>();
 
 	constructor() {
 		super(() => {
 			this.onStdErrEmitter.dispose();
+
 			this.onStdOutEmitter.dispose();
 		});
 	}
 
 	onStarted = this.onStartedEmitter.event;
+
 	onStdErr = this.onStdErrEmitter.event;
+
 	onStdOut = this.onStdOutEmitter.event;
 
 	static async exec(
@@ -103,6 +109,7 @@ export class Process extends vscode.Disposable {
 		return new Promise((resolve, reject) => {
 			// Without the shell option, it pukes on arguments
 			options = options || {};
+
 			options.shell ??= true;
 
 			const process = cp.spawn(command, options);
@@ -166,6 +173,7 @@ export class Process extends vscode.Disposable {
 										new Promise<void>((resolve) => {
 											processCloseListener = () =>
 												resolve();
+
 											process.once(
 												"close",
 												processCloseListener,

@@ -21,7 +21,9 @@ const localize = nls.loadMessageBundle(getLocalizationPathForFile(__filename));
 
 export interface TyeDebugConfiguration extends vscode.DebugConfiguration {
 	applicationName: string;
+
 	services?: string[];
+
 	watch?: boolean;
 }
 

@@ -13,11 +13,13 @@ import { TyePathProvider } from "./tyePathProvider";
 
 export interface TyeProcess {
 	pid: number;
+
 	dashboardPort: number;
 }
 
 export interface TyeProcessWithPorts {
 	pid: number;
+
 	ports: number[];
 }
 

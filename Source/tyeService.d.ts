@@ -3,14 +3,19 @@
 
 interface TyeApplication {
 	id: string;
+
 	name: string;
+
 	source: string;
 }
 
 interface TyeService {
 	description: TyeDescription;
+
 	replicas: { [key: string]: TyeReplica };
+
 	serviceSource: "configuration" | "extension" | "host";
+
 	serviceType:
 		| "external"
 		| "project"
@@ -26,7 +31,10 @@ interface TyeDescription {
 
 interface TyeReplica {
 	name: string;
+
 	pid: number | undefined;
+
 	environment: { [key: string]: string };
+
 	ports: number[];
 }

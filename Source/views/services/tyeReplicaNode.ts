@@ -45,11 +45,13 @@ export function getReplicaBrowseUrl(
 			replica.environment[
 				`service__${service.description.name}__host`.toUpperCase()
 			];
+
 		port = Number.parseInt(
 			replica.environment[
 				`service__${service.description.name}__port`.toUpperCase()
 			],
 		);
+
 		protocol =
 			replica.environment[
 				`service__${service.description.name}__protocol`.toUpperCase()
@@ -80,7 +82,9 @@ export default class TyeReplicaNode implements TyeNode {
 		const treeItem = new vscode.TreeItem(this.replica.name);
 
 		treeItem.contextValue = `${this.service.serviceType} replica`;
+
 		treeItem.iconPath = new vscode.ThemeIcon("server-process");
+
 		treeItem.id = this.id;
 
 		if (isAttachable(this.service)) {

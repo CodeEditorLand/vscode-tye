@@ -5,6 +5,7 @@ export type WriterFont = "default" | "bold";
 
 export interface PseudoterminalWriter {
 	write(output: string, font?: WriterFont): void;
+
 	writeLine(output: string, font?: WriterFont): void;
 }
 

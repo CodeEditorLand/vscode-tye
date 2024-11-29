@@ -14,12 +14,14 @@ export interface HttpPostOptions {
 
 export interface HttpClient {
 	get(url: string, token?: vscode.CancellationToken): Promise<HttpResponse>;
+
 	post(
 		url: string,
 		data?: unknown,
 		options?: HttpPostOptions,
 		token?: vscode.CancellationToken,
 	): Promise<HttpResponse>;
+
 	delete(url: string, token?: vscode.CancellationToken): Promise<void>;
 }
 

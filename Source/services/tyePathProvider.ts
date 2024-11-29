@@ -20,6 +20,7 @@ export default class LocalTyePathProvider implements TyePathProvider {
 		if (this.settingsProvider.tyePath) {
 			return this.settingsProvider.tyePath;
 		}
+
 		if (!this.cachedTyePath) {
 			this.cachedTyePath = await this.tryGetTyePath();
 		}

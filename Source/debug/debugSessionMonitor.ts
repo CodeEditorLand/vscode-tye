@@ -16,6 +16,7 @@ export class CoreClrDebugSessionMonitor
 	implements DebugSessionMonitor
 {
 	private readonly onDidStartListener: vscode.Disposable;
+
 	private readonly onDidTerminateListener: vscode.Disposable;
 
 	private readonly pids = new Set<number>();
@@ -23,6 +24,7 @@ export class CoreClrDebugSessionMonitor
 	constructor() {
 		super(() => {
 			this.onDidStartListener?.dispose();
+
 			this.onDidTerminateListener?.dispose();
 		});
 

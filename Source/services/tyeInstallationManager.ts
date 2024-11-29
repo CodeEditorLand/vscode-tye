@@ -13,12 +13,14 @@ const localize = nls.loadMessageBundle(getLocalizationPathForFile(__filename));
 
 export interface TyeInstallationManager {
 	ensureInstalled(context?: IErrorHandlingContext): Promise<void>;
+
 	ensureInstalledVersion(
 		version: string,
 		context?: IErrorHandlingContext,
 	): Promise<void>;
 
 	isInstalled(): Promise<boolean>;
+
 	isVersionInstalled(version: string): Promise<boolean>;
 }
 

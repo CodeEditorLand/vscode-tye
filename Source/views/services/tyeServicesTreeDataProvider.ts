@@ -21,7 +21,9 @@ export class TyeServicesTreeDataProvider
 	private readonly onDidChangeTreeDataEmitter = new vscode.EventEmitter<
 		void | TreeNode | null | undefined
 	>();
+
 	private readonly listener: Subscription;
+
 	private cachedApplications: TyeApplication[] = [];
 
 	constructor(

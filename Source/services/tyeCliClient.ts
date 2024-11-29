@@ -11,12 +11,15 @@ const localize = nls.loadMessageBundle(getLocalizationPathForFile(__filename));
 
 export interface InitOptions {
 	readonly force?: boolean;
+
 	readonly noDefault?: boolean;
+
 	readonly path?: string;
 }
 
 export interface TyeCliClient {
 	init(options?: InitOptions): Promise<void>;
+
 	version(): Promise<string>;
 }
 

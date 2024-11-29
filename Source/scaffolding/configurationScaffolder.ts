@@ -7,6 +7,7 @@ import { ConflictHandler } from "./conflicts";
 
 export interface DebugConfiguration extends vscode.DebugConfiguration {
 	preLaunchTask?: string;
+
 	postDebugTask?: string;
 }
 

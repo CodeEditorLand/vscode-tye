@@ -23,6 +23,7 @@ export class YamlTyeApplicationConfigurationReader
 
 export interface ProvidedTyeApplicationConfiguration {
 	file: vscode.Uri;
+
 	folder: vscode.WorkspaceFolder;
 
 	getConfiguration(): Promise<TyeApplicationConfiguration>;

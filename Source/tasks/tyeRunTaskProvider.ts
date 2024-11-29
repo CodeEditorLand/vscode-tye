@@ -21,18 +21,29 @@ export type TyeVerbosity = "Debug" | "Info" | "Quiet";
 
 export interface TyeRunTaskDefinition extends TaskDefinition {
 	build?: boolean;
+
 	dashboard?: boolean;
+
 	debug?: "*" | string | string[];
 
 	docker?: boolean;
+
 	dtrace?: TyeDistributedTraceProvider;
+
 	framework?: string;
+
 	logs?: TyeLogProvider;
+
 	metrics?: string;
+
 	path?: string;
+
 	port?: number;
+
 	tags?: string | string[];
+
 	verbosity?: TyeVerbosity;
+
 	watch?: boolean;
 }
 

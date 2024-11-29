@@ -13,14 +13,19 @@ export type KnownServiceType = "project" | "function";
 
 export type TyeProjectService = {
 	replicas: { [key: string]: number | undefined };
+
 	serviceType: KnownServiceType;
 };
 
 export type TyeApplication = {
 	readonly dashboard: vscode.Uri;
+
 	readonly id: string;
+
 	readonly name: string;
+
 	readonly pid?: number;
+
 	readonly projectServices: { [key: string]: TyeProjectService };
 };
 

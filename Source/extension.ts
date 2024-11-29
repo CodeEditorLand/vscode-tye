@@ -63,7 +63,9 @@ export function activate(context: vscode.ExtensionContext): Promise<void> {
 	}
 
 	ext.context = context;
+
 	ext.ignoreBundle = true;
+
 	ext.outputChannel = registerDisposable(
 		createAzExtOutputChannel("Tye", "tye"),
 	);
@@ -263,18 +265,22 @@ export function activate(context: vscode.ExtensionContext): Promise<void> {
 				"vscode-tye.commands.help.getStarted",
 				createGetStartedCommand(ui),
 			);
+
 			telemetryProvider.registerCommandWithTelemetry(
 				"vscode-tye.commands.help.installTye",
 				createInstallTyeCommand(ui),
 			);
+
 			telemetryProvider.registerCommandWithTelemetry(
 				"vscode-tye.commands.help.readDocumentation",
 				createReadDocumentationCommand(ui),
 			);
+
 			telemetryProvider.registerCommandWithTelemetry(
 				"vscode-tye.commands.help.reportIssue",
 				createReportIssueCommand(ui),
 			);
+
 			telemetryProvider.registerCommandWithTelemetry(
 				"vscode-tye.commands.help.reviewIssues",
 				createReviewIssuesCommand(ui),
@@ -322,6 +328,7 @@ export function activate(context: vscode.ExtensionContext): Promise<void> {
 	) {
 		const replicas: {
 			replica: TyeReplica;
+
 			serviceType: KnownServiceType;
 		}[] = [];
 
